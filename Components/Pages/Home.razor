@@ -1,0 +1,22 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<RenderStateLogger Parent="this" />
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<div class="m-2">
+	<button class="btn btn-primary" @onclick="this.ShowMessage">Show MessageBox</button>
+</div>
+@code {
+	[CascadingParameter] protected MessageBoxHandle MessageBoxHandle { get; set; } = default!;
+
+	private async Task ShowMessage()
+	{
+		await this.MessageBoxHandle.ShowAsync("Be careful not to count over 10!!!");
+
+	}
+}

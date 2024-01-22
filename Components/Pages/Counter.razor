@@ -1,0 +1,52 @@
+﻿@page "/counter"
+@rendermode InteractiveServer
+
+<PageTitle>Counter</PageTitle>
+
+<RenderStateLogger Parent="this" />
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<p role="status">Calling OnInitializedAsync count: @numInitCalls</p>
+
+<p role="status">Calling OnInitializedAsync <b>static</b> count: @numStaticInitCalls</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+	[CascadingParameter] protected MessageBoxHandle MessageBoxHandle { get; set; } = default!;
+
+	private int currentCount = 0;
+
+	private static int numStaticInitCalls = 0;
+
+	private int numInitCalls = 0;
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+
+		numInitCalls++;
+		numStaticInitCalls++;
+
+		/*
+		await PopupMessageBox.ShowAsync("Popup Sample", "Be careful not to count over 10!!!",
+			null, null, null, PopupMessageBox.ButtonOk);
+		*/
+	}
+
+	private async Task IncrementCount()
+	{
+		currentCount++;
+
+		await this.MessageBoxHandle.ShowAsync("Be careful not to count over 10!!!");
+
+		/*
+		if (currentCount >= 10)
+			await PopupMessageBox.ShowAsync("Countdown Commenced", "We warned you. Now that the count<br/>is over 10, we are launching the missles.",
+					null, null, null, PopupMessageBox.ButtonOk);
+		*/
+	}
+}

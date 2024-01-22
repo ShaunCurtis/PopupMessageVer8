@@ -1,0 +1,64 @@
+﻿<CascadingValue Value="_messageBoxHandle" IsFixed="true">
+	@ChildContent
+</CascadingValue>
+
+<!-- Modal -->
+<div class="@this.CssClass" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="this.CloseAsync"></button>
+            </div>
+            <div class="modal-body">
+                @_message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="this.CloseAsync" >Close</button>
+                <button type="button" class="btn btn-primary" @onclick="this.CloseAsync">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-dialog-show {
+        display: block;
+    }
+
+    .modal-dialog-hide {
+        display: none;
+    }
+</style>
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private bool _show;
+    private string? _message;
+
+    private string CssClass => _show ? "modal fade show modal-dialog-show" : "modal fade modal-dialog-hide";
+
+    private TaskCompletionSource? _taskCompletionSource;
+
+    private MessageBoxHandle _messageBoxHandle;
+
+    public MessageBox()
+    {
+        _messageBoxHandle = new(this);
+    }
+
+    public Task ShowAsync(string message)
+    {
+        _message = message;
+        _taskCompletionSource = new();
+        _show = true;
+        StateHasChanged();
+        return _taskCompletionSource.Task;
+    }
+
+    private Task CloseAsync()
+    {
+        _show = false;
+        _taskCompletionSource?.SetResult();
+        return Task.CompletedTask;
+    }
+}
