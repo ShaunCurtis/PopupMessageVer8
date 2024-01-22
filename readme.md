@@ -242,7 +242,35 @@ Weather lifecycle initiated. Render State: SSR
 
 There are many ways to deal with pre-rendering.
 
-A simple `PreRenderSplash` component
+The normal global method is:
+
+```csharp
+    <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)" />
+```
+
+With that set you get:
+
+```text
+Routes lifecycle initiated. Render State: SSR
+MainLayout lifecycle initiated. Render State: SSR
+Home lifecycle initiated. Render State: SSR
+MainLayout lifecycle initiated. Render State: SSR
+Counter lifecycle initiated. Render State: SSR
+MainLayout lifecycle initiated. Render State: SSR
+Home lifecycle initiated. Render State: SSR
+MainLayout lifecycle initiated. Render State: SSR
+Counter lifecycle initiated. Render State: SSR
+MainLayout lifecycle initiated. Render State: SSR
+Weather lifecycle initiated. Render State: SSR
+Weather lifecycle initiated. Render State: SSR
+Routes lifecycle initiated. Render State: SSR
+MainLayout lifecycle initiated. Render State: SSR
+Weather lifecycle initiated. Render State: SSR
+Weather lifecycle initiated. Render State: SSR
+```
+
+
+But if you want to stop it within the application you can create a  simple `PreRenderSplash` component.
 
 ```csharp
 
